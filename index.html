@@ -1,86 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Magic Weapons</title>
+  <meta charset="UTF-8" />
   <style>
     body {
       background-color: #111;
-      color: white;
       font-family: Arial, sans-serif;
-      padding: 20px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
     }
     table {
+      width: 95%;
+      margin: auto;
       border-collapse: collapse;
-      width: 100%;
+      background-color: #111;
     }
     th, td {
       border: 1px solid #333;
       padding: 8px;
       text-align: center;
+      color: white;
     }
     th {
       background-color: #222;
-      color: white;
     }
     tr:nth-child(even) {
       background-color: #1a1a1a;
     }
-    tr:nth-child(odd) {
-      background-color: #000;
-    }
     img {
-      max-height: 32px;
+      height: 40px;
     }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">Magic Weapons</h2>
-  <table id="weaponTable">
-    <thead>
-      <tr></tr>
-    </thead>
-    <tbody></tbody>
+  <h1>Magic Weapons</h1>
+  <table>
+    <tr><th>ITEM</th><th>NAME</th><th>Damage</th><th>Attack Speed</th><th>Range</th><th>Defense</th><th>Size</th><th>Weight</th><th>Attributes</th></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/f/fa/Wooden_staff.png" alt="image" /></td><td>Wooden Staff</td><td>5</td><td>2</td><td>32</td><td></td><td>8/10</td><td>30oz</td><td></td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/b/bf/Staff1.png" alt="image" /></td><td>Crystal Staff</td><td>10</td><td>1</td><td>37</td><td></td><td>8/10</td><td>20oz</td><td></td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/f/fa/Staff4.png" alt="image" /></td><td>Ancient Staff</td><td>12</td><td>Need info</td><td>47</td><td></td><td>8/10</td><td>30oz</td><td>-2 ability, 20 mana, 2 magic</td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/1/14/Staff2.png" alt="image" /></td><td>Unholy Staff</td><td>Need info</td><td>Need info</td><td>Need info</td><td>Need info</td><td>Need Info</td><td>Need info</td><td></td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/0/03/Orb_blue.png" alt="image" /></td><td>Orb</td><td>Need info</td><td></td><td></td><td>2</td><td>2/10</td><td>19oz</td><td>2 magic</td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/f/f5/Orb_green.png" alt="image" /></td><td>Green Orb</td><td>3</td><td></td><td></td><td>3</td><td>2/10</td><td>27oz</td><td>3 magic, 25 HP, 25 mana</td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/5/5b/Orb_red.png" alt="image" /></td><td>Red Orb</td><td>10</td><td></td><td></td><td>3</td><td>2/10</td><td>21oz</td><td>5 ability, -75 HP</td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/0/0e/SnakeOrb.png" alt="image" /></td><td>Snake Orb</td><td>Need info</td><td>Need info</td><td>Need info</td><td>Need info</td><td>2/10</td><td>Need info</td><td>78 mana, 2 def, 3 magic</td></tr><tr><td><img src="https://static.wikia.nocookie.net/apogea/images/4/4e/Staff3.png" alt="image" /></td><td>Stone Wand</td><td>15</td><td>3</td><td>27</td><td></td><td>8/10</td><td>50oz</td><td></td></tr>
   </table>
-
-  <script>
-    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRPeOHz_lYh0s1_ZoiQ5ruNz2wYBPFqDiCXbxzUqgDb5qsd6ZSBws4_xqCKfbhkxTEujqOy1vKrgGHE/pub?gid=864145185&single=true&output=csv";
-
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(data => {
-        const rows = data.trim().split('\n').map(row => row.split(','));
-        const table = document.getElementById('weaponTable');
-        const thead = table.querySelector('thead tr');
-        const tbody = table.querySelector('tbody');
-
-        // Build header
-        rows[0].forEach(header => {
-          const th = document.createElement('th');
-          th.textContent = header;
-          thead.appendChild(th);
-        });
-
-        // Build body
-        for (let i = 1; i < rows.length; i++) {
-          const tr = document.createElement('tr');
-          rows[i].forEach((cell, index) => {
-            const td = document.createElement('td');
-            if (index === 0 && cell.includes('http')) {
-              const img = document.createElement('img');
-              img.src = cell.trim();
-              td.appendChild(img);
-            } else {
-              td.textContent = cell.trim();
-            }
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        }
-      })
-      .catch(err => {
-        document.body.innerHTML += "<p style='color:red;'>Failed to load data: " + err + "</p>";
-      });
-  </script>
 </body>
 </html>
