@@ -1,78 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Magic Weapons</title>
   <style>
     body {
+      background-color: #111;
+      color: white;
       font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #f1f1f1;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #ffffff;
-    }
     table {
-      width: 100%;
       border-collapse: collapse;
-      background-color: #2b2b2b;
+      width: 100%;
     }
     th, td {
-      border: 1px solid #444;
-      padding: 10px;
+      border: 1px solid #333;
+      padding: 8px;
       text-align: center;
     }
     th {
-      background-color: #333;
-    }
-    img {
-      max-height: 40px;
+      background-color: #222;
+      color: white;
     }
     tr:nth-child(even) {
-      background-color: #242424;
+      background-color: #1a1a1a;
+    }
+    tr:nth-child(odd) {
+      background-color: #000;
+    }
+    img {
+      max-height: 32px;
     }
   </style>
 </head>
 <body>
-  <h1>Magic Weapons</h1>
-  <div id="table-container">Loading...</div>
+  <h2 style="text-align:center;">Magic Weapons</h2>
+  <table id="weaponTable">
+    <thead>
+      <tr></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
-    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRPeOHz_lYh0s1_ZoiQ5ruNz2wYBPFqDiCXbxzUqgDb5qsd6ZSBws4_xqCKfbhkxTEujqOy1vKrgGHE/pub?gid=864145185&single=true&output=csv")
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRPeOHz_lYh0s1_ZoiQ5ruNz2wYBPFqDiCXbxzUqgDb5qsd6ZSBws4_xqCKfbhkxTEujqOy1vKrgGHE/pub?gid=864145185&single=true&output=csv";
+
+    fetch(csvUrl)
       .then(response => response.text())
       .then(data => {
-        const rows = data.split("\n").map(row => row.split(","));
-        let tableHTML = "<table><thead><tr>";
+        const rows = data.trim().split('\n').map(row => row.split(','));
+        const table = document.getElementById('weaponTable');
+        const thead = table.querySelector('thead tr');
+        const tbody = table.querySelector('tbody');
 
+        // Build header
         rows[0].forEach(header => {
-          tableHTML += `<th>${header}</th>`;
+          const th = document.createElement('th');
+          th.textContent = header;
+          thead.appendChild(th);
         });
 
-        tableHTML += "</tr></thead><tbody>";
-
+        // Build body
         for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          if (row.every(cell => cell.trim() === "")) continue;
-
-          tableHTML += "<tr>";
-          row.forEach((cell, index) => {
-            const trimmed = cell.trim();
-            const isImage = trimmed.startsWith("http") && (trimmed.includes(".png") || trimmed.includes(".jpg"));
-            tableHTML += isImage
-              ? `<td><img src="\${trimmed}" alt="image" /></td>`
-              : `<td>\${trimmed}</td>`;
+          const tr = document.createElement('tr');
+          rows[i].forEach((cell, index) => {
+            const td = document.createElement('td');
+            if (index === 0 && cell.includes('http')) {
+              const img = document.createElement('img');
+              img.src = cell.trim();
+              td.appendChild(img);
+            } else {
+              td.textContent = cell.trim();
+            }
+            tr.appendChild(td);
           });
-          tableHTML += "</tr>";
+          tbody.appendChild(tr);
         }
-
-        tableHTML += "</tbody></table>";
-        document.getElementById("table-container").innerHTML = tableHTML;
       })
-      .catch(error => {
-        document.getElementById("table-container").innerHTML = "Error loading data";
-        console.error("CSV fetch error:", error);
+      .catch(err => {
+        document.body.innerHTML += "<p style='color:red;'>Failed to load data: " + err + "</p>";
       });
   </script>
 </body>
